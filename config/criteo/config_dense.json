@@ -1,0 +1,296 @@
+{
+    "base_info": {
+        "train_path": "./data/criteo/dense/",
+        "sparse_path": "./data/criteo/sparse/",
+        "dense_path": "./data/criteo/dense/",
+        "k_fold_path": "./data/criteo/k_fold/",
+        "k_fold": 10,
+        "random_seed": 2018
+    },
+    "model": {
+        "data_prefix": "./data/criteo/k_fold/",
+        "results_prefix": "./data/model/",
+        "train_results_file": "train_results.txt",
+        "test_results_file": "test_results.txt"
+    },
+    "features": [
+        {
+            "name": "label",
+            "type": "label",
+            "dtype": "int32"
+        },
+        {
+            "name": "I1",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I2",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I3",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I4",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I5",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I6",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I7",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I8",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I9",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I10",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I11",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I12",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "I13",
+            "type": "dense",
+            "dtype": "float32"
+        },
+        {
+            "name": "C1",
+            "type": "sparse",
+            "dimension": 1443,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C2",
+            "type": "sparse",
+            "dimension": 554,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C3",
+            "type": "sparse",
+            "dimension": 175781,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C4",
+            "type": "sparse",
+            "dimension": 128509,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C5",
+            "type": "sparse",
+            "dimension": 305,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C6",
+            "type": "sparse",
+            "dimension": 19,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C7",
+            "type": "sparse",
+            "dimension": 11930,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C8",
+            "type": "sparse",
+            "dimension": 629,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C9",
+            "type": "sparse",
+            "dimension": 4,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C10",
+            "type": "sparse",
+            "dimension": 41224,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C11",
+            "type": "sparse",
+            "dimension": 5160,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C12",
+            "type": "sparse",
+            "dimension": 174835,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C13",
+            "type": "sparse",
+            "dimension": 3175,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C14",
+            "type": "sparse",
+            "dimension": 27,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C15",
+            "type": "sparse",
+            "dimension": 11254,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C16",
+            "type": "sparse",
+            "dimension": 165206,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C17",
+            "type": "sparse",
+            "dimension": 11,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C18",
+            "type": "sparse",
+            "dimension": 4605,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C19",
+            "type": "sparse",
+            "dimension": 2017,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C20",
+            "type": "sparse",
+            "dimension": 5,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C21",
+            "type": "sparse",
+            "dimension": 172322,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C22",
+            "type": "sparse",
+            "dimension": 18,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C23",
+            "type": "sparse",
+            "dimension": 16,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C24",
+            "type": "sparse",
+            "dimension": 56456,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C25",
+            "type": "sparse",
+            "dimension": 86,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C26",
+            "type": "sparse",
+            "dimension": 43356,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        }
+    ]
+}

@@ -1,0 +1,192 @@
+{
+    "base_info": {
+        "train_path": "./data/avazu/sparse/",
+        "concat_path": "./data/avazu/concat/",
+        "sparse_path": "./data/avazu/sparse/",
+        "dense_path": "./data/avazu/dense/",
+        "k_fold_path": "./data/avazu/k_fold/",
+        "k_fold": 10,
+        "random_seed": 2018
+    },
+    "model": {
+        "data_prefix": "./data/avazu/k_fold/",
+        "results_prefix": "./data/model/",
+        "train_results_file": "train_results.txt",
+        "test_results_file": "test_results.txt"
+    },
+    "features": [
+        {
+            "name": "label",
+            "type": "label",
+            "dtype": "int32"
+        },
+        {
+            "name": "C1",
+            "type": "sparse",
+            "dimension": 8,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "banner_pos",
+            "type": "sparse",
+            "dimension": 8,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "site_id",
+            "type": "sparse",
+            "dimension": 3564,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "site_domain",
+            "type": "sparse",
+            "dimension": 4325,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "site_category",
+            "type": "sparse",
+            "dimension": 25,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "app_id",
+            "type": "sparse",
+            "dimension": 5066,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "app_domain",
+            "type": "sparse",
+            "dimension": 307,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "app_category",
+            "type": "sparse",
+            "dimension": 31,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "device_id",
+            "type": "sparse",
+            "dimension": 278182,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "device_ip",
+            "type": "sparse",
+            "dimension": 1242892,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "device_model",
+            "type": "sparse",
+            "dimension": 6592,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "device_type",
+            "type": "sparse",
+            "dimension": 6,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "device_conn_type",
+            "type": "sparse",
+            "dimension": 5,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C14",
+            "type": "sparse",
+            "dimension": 2483,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C15",
+            "type": "sparse",
+            "dimension": 9,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C16",
+            "type": "sparse",
+            "dimension": 10,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C17",
+            "type": "sparse",
+            "dimension": 432,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C18",
+            "type": "sparse",
+            "dimension": 5,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C19",
+            "type": "sparse",
+            "dimension": 68,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C20",
+            "type": "sparse",
+            "dimension": 169,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        },
+        {
+            "name": "C21",
+            "type": "sparse",
+            "dimension": 61,
+            "use_hash": false,
+            "dtype": "int32",
+            "embedding": true
+        }
+    ]
+}
