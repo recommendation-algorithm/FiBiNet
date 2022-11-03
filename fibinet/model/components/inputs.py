@@ -17,33 +17,59 @@ from tensorflow.python.keras.regularizers import l2
 from .layers import Hash, Linear
 from fibinet.common.utils import Utils
 
-class SparseFeat(namedtuple('SparseFeat', ['name', 'dimension', 'use_hash', 'dtype', 'embedding_name', 'embedding'])):
+class SparseFeat(namedtuple('SparseFeat', ['name', 'dimension', 'use_hash', 'dtype','embedding_name','embedding', 'feature_num', 'feature_origin_num', 'feature_info_gain', 'feature_ig', 'feature_attention'])):
     __slots__ = ()
-    
-    def __new__(cls, name, dimension, use_hash=False, dtype="int32", embedding_name=None, embedding=True):
+
+    def __new__(cls, name, dimension, use_hash=False, dtype="int32", embedding_name=None, embedding=True, feature_num=None, feature_origin_num=None, feature_info_gain=None, feature_ig=None, feature_attention=None):
         if embedding and embedding_name is None:
             embedding_name = name
-        return super(SparseFeat, cls).__new__(cls, name, dimension, use_hash, dtype, embedding_name, embedding)
+        if feature_num is None:
+            feature_num = dimension
+        if feature_origin_num is None:
+            feature_origin_num = dimension
+        if feature_info_gain is None:
+            feature_info_gain = dimension
+        if feature_ig is None:
+            feature_ig = dimension
+        if feature_attention is None:
+            feature_attention = dimension
+        return super(SparseFeat, cls).__new__(cls, name, dimension, use_hash, dtype, embedding_name, embedding, feature_num, feature_origin_num, feature_info_gain, feature_ig, feature_attention)
 
 
-class DenseFeat(namedtuple('DenseFeat', ['name', 'dimension', 'dtype'])):
+class DenseFeat(namedtuple('DenseFeat', ['name', 'dimension', 'dtype', 'feature_num', 'feature_origin_num', 'feature_info_gain', 'feature_ig', 'feature_attention'])):
     __slots__ = ()
-    
-    def __new__(cls, name, dimension=1, dtype="float32"):
-        return super(DenseFeat, cls).__new__(cls, name, dimension, dtype)
+
+    def __new__(cls, name, dimension=1, dtype="float32", feature_num=None, feature_origin_num=None, feature_info_gain=None, feature_ig=None, feature_attention=None):
+        if feature_num is None:
+            feature_num = dimension
+        if feature_origin_num is None:
+            feature_origin_num = dimension
+        if feature_info_gain is None:
+            feature_info_gain = dimension
+        if feature_ig is None:
+            feature_ig = dimension
+        if feature_attention is None:
+            feature_attention = dimension
+        return super(DenseFeat, cls).__new__(cls, name, dimension, dtype, feature_num, feature_origin_num, feature_info_gain, feature_ig, feature_attention)
 
 
-class VarLenSparseFeat(namedtuple('VarLenFeat',
-                                  ['name', 'dimension', 'maxlen', 'combiner', 'use_hash', 'dtype', 'embedding_name',
-                                   'embedding'])):
+class VarLenSparseFeat(namedtuple('VarLenFeat', ['name', 'dimension', 'maxlen', 'combiner', 'use_hash', 'dtype','embedding_name','embedding', 'feature_num', 'feature_origin_num', 'feature_info_gain', 'feature_ig', 'feature_attention'])):
     __slots__ = ()
-    
-    def __new__(cls, name, dimension, maxlen, combiner="mean", use_hash=False, dtype="float32", embedding_name=None,
-                embedding=True):
+
+    def __new__(cls, name, dimension, maxlen, combiner="mean", use_hash=False, dtype="float32", embedding_name=None, embedding=True, feature_num=None, feature_origin_num=None, feature_info_gain=None, feature_ig=None, feature_attention=None):
         if embedding_name is None:
             embedding_name = name
-        return super(VarLenSparseFeat, cls).__new__(cls, name, dimension, maxlen, combiner, use_hash, dtype,
-                                                    embedding_name, embedding)
+        if feature_num is None:
+            feature_num = dimension
+        if feature_origin_num is None:
+            feature_origin_num = dimension
+        if feature_info_gain is None:
+            feature_info_gain = dimension
+        if feature_ig is None:
+            feature_ig = dimension
+        if feature_attention is None:
+            feature_attention = dimension
+        return super(VarLenSparseFeat, cls).__new__(cls, name, dimension, maxlen, combiner, use_hash, dtype, embedding_name, embedding, feature_num, feature_origin_num, feature_info_gain, feature_ig, feature_attention)
 
 
 def build_input_features(feature_columns, mask_zero=True, prefix=''):

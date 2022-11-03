@@ -55,6 +55,50 @@ class Hash(Layer):
         return config
 
 
+class StrongHash(Layer):
+    """
+    hash the input to [0,num_buckets)
+    if mask_zero = True,0 or 0.0 will be set to 0,other value will be set in range[1,num_buckets)
+    """
+
+    def __init__(self, num_buckets, mask_zero=False, strong=True, key=(1024, 2048), **kwargs):
+        self.num_buckets = num_buckets
+        self.mask_zero = mask_zero
+        self.strong = strong
+        self.key = key
+        super(StrongHash, self).__init__(**kwargs)
+
+    def build(self, input_shape):
+        # Be sure to call this somewhere!
+        super(StrongHash, self).build(input_shape)
+
+    def call(self, x, mask=None, **kwargs):
+        if x.dtype != tf.string:
+            x = tf.as_string(x, )
+        num_buckets = self.num_buckets if not self.mask_zero else self.num_buckets - 1
+        try:
+            if self.strong:
+                hash_x = tf.string_to_hash_bucket_strong(x, num_buckets, key=self.key)
+            else:
+                hash_x = tf.string_to_hash_bucket_fast(x, num_buckets, name=None)  # weak hash
+        except:
+            raise Exception("StrongHash Failed. Inputs: {}, NumBuckets: {}".format(x, num_buckets))
+        if self.mask_zero:
+            mask_1 = tf.cast(tf.not_equal(x, "0"), 'int64')
+            mask_2 = tf.cast(tf.not_equal(x, "0.0"), 'int64')
+            mask = mask_1 * mask_2
+            hash_x = (hash_x + 1) * mask
+        return hash_x
+
+    def compute_mask(self, inputs, mask):
+        return None
+
+    def get_config(self, ):
+        config = {'num_buckets': self.num_buckets, 'mask_zero': self.mask_zero, 'strong': self.strong, 'key': self.key}
+        base_config = super(StrongHash, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
+
+
 class Linear(Layer):
     
     def __init__(self, l2_reg=0.0, mode=0, use_bias=True, **kwargs):
@@ -200,7 +244,9 @@ class SENETLayer(Layer):
     
     def __init__(self, senet_squeeze_mode="mean", senet_squeeze_group_num=1, senet_squeeze_topk=1,
                  senet_reduction_ratio=3.0, senet_excitation_mode="vector", senet_activation="relu",
-                 senet_use_skip_connection=False, senet_reweight_norm_type="none", seed=1024, **kwargs):
+                 senet_use_skip_connection=False, senet_reweight_norm_type="none",
+                 output_field_size=None, output_embedding_size=None, output_weights=False,
+                 seed=1024, **kwargs):
         self.senet_squeeze_mode = senet_squeeze_mode
         self.senet_squeeze_group_num = senet_squeeze_group_num
         self.senet_squeeze_topk = senet_squeeze_topk
@@ -209,6 +255,9 @@ class SENETLayer(Layer):
         self.senet_activation = senet_activation
         self.senet_use_skip_connection = senet_use_skip_connection
         self.senet_reweight_norm_type = senet_reweight_norm_type
+        self.output_field_size = output_field_size
+        self.output_embedding_size = output_embedding_size
+        self.output_weights = output_weights
         self.seed = seed
         
         self.field_size = None
@@ -225,6 +274,8 @@ class SENETLayer(Layer):
         
         self.field_size = input_shape[-2].value
         self.embedding_size = input_shape[-1].value
+        self.output_field_size = self.output_field_size if self.output_field_size else self.field_size
+        self.output_embedding_size = self.output_embedding_size if self.output_embedding_size else self.embedding_siz
         self.tensor_dot = tf.keras.layers.Lambda(lambda x: tf.tensordot(x[0], x[1], axes=(-1, 0)))
         
         # Squeeze & Excitation
@@ -256,9 +307,13 @@ class SENETLayer(Layer):
         
         # Re-weight
         if "bit" in self.senet_excitation_mode:
-            weights = tf.reshape(A_2, [-1, self.field_size, self.embedding_size])  # [batch, fields, embeddings]
+            weights = tf.reshape(A_2, [-1, self.output_field_size, self.output_embedding_size])  # [batch, fields, embeddings]
         else:
             weights = tf.expand_dims(A_2, axis=2)  # [batch, self.fields*groups, 1]
+
+        if self.output_weights:
+            return weights
+
         reweight_inputs = inputs  # [batch, fields, embeddings]
         if "group" in self.senet_excitation_mode:
             # [batch, self.fields*groups, embeddings//groups]
@@ -322,11 +377,11 @@ class SENETLayer(Layer):
     
     def _excitation_dimension(self):
         # default ExcitationMode: vector
-        output_dim = self.field_size
+        output_dim = self.output_field_size
         if "group" in self.senet_excitation_mode:  # ExcitationMode: group
-            output_dim = self.field_size * self.senet_squeeze_group_num
+            output_dim = self.output_field_size * self.senet_squeeze_group_num
         if "bit" in self.senet_excitation_mode:  # ExcitationMode = bit
-            output_dim = self.field_size * self.embedding_size
+            output_dim = self.output_field_size * self.output_embedding_size
         return output_dim
     
     def compute_output_shape(self, input_shape):
@@ -636,6 +691,32 @@ class PredictionLayer(Layer):
             'use_bias': self.use_bias,
         })
         return config
+
+
+class TemperatureSoftmaxLayer(Layer):
+    def __init__(self, axis=-1, temperature=1.0, **kwargs):
+        self.axis = axis
+        self.temperature = temperature
+        super(TemperatureSoftmaxLayer, self).__init__(**kwargs)
+
+    def build(self, input_shape):
+        self.softmax_layer = tf.keras.layers.Softmax(axis=self.axis)
+        # Be sure to call this somewhere!
+        super(TemperatureSoftmaxLayer, self).build(input_shape)
+        return
+
+    def call(self, inputs, training=None, **kwargs):
+        temperature_inputs = inputs / self.temperature
+        outputs = self.softmax_layer(temperature_inputs)
+        return outputs
+
+    def compute_output_shape(self, input_shape):
+        return input_shape
+
+    def get_config(self, ):
+        config = {'axis': self.axis, 'temperature': self.temperature}
+        base_config = super(TemperatureSoftmaxLayer, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))
 
 
 def activation_layer(activation):
